@@ -1,0 +1,195 @@
+{% extends "orders/layout.html" %}
+
+{% block body %}
+<div> {{ message }} </div>
+
+<h1>Hello, {{ user.first_name }}</h1>
+<ul>
+    <li>Currently logged in as: {{ user.username }}</li>
+    <li><a href="{% url 'cart' %}">Your cart</a></li>
+    <li><a href="{% url 'orders' %}">Your orders</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% if user.is_staff %}
+        <li><a href="{% url 'all_orders' %}">All orders (admin)</a></li></li>
+    {% endif %}
+</ul>
+
+<h1>Regular Pizzas</h1>
+<table>
+    {% for pizza in regular_pizzas %}
+        <tr>
+            <th> {{ pizza.name }} </th>
+            <th> 
+                {% if pizza.price_small %}
+                <form action="{% url 'create_pizza' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ pizza.price_small }}">
+                    <input name="name" type="hidden" value="{{ pizza.name }}">
+                    <input name="type" type="hidden" value="regular">
+                    <input name="is_special" type="hidden" value="{{ pizza.is_special }}">
+                    <input name="topping_count" type="hidden" value="{{ pizza.topping_count }}">
+                    <input name="size" type="hidden" value="small">
+                    <button type="submit"> ${{ pizza.price_small }} </button>
+                </form>
+                {% endif %}
+            </th>
+            <th> 
+                {% if pizza.price_large %}
+                <form action="{% url 'create_pizza' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ pizza.price_large }}">
+                    <input name="name" type="hidden" value="{{ pizza.name }}">
+                    <input name="is_special" type="hidden" value="{{ pizza.is_special }}">
+                    <input name="topping_count" type="hidden" value="{{ pizza.topping_count }}">
+                    <input name="type" type="hidden" value="regular">
+                    <input name="size" type="hidden" value="large">
+                    <button type="submit"> ${{ pizza.price_large }} </button>
+                </form>
+                {% endif %}
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Sicilian Pizzas</h1>
+<table>
+    {% for pizza in sicilian_pizzas %}
+        <tr>
+            <th> {{ pizza.name }} </th>
+            <th> 
+                {% if pizza.price_small %}
+                <form action="{% url 'create_pizza' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ pizza.price_small }}">
+                    <input name="name" type="hidden" value="{{ pizza.name }}">
+                    <input name="is_special" type="hidden" value="{{ pizza.is_special }}">
+                    <input name="topping_count" type="hidden" value="{{ pizza.topping_count }}">
+                    <input name="type" type="hidden" value="sicilian">
+                    <input name="size" type="hidden" value="small">
+                    <button type="submit"> ${{ pizza.price_small }} </button>
+                </form>
+                {% endif %}
+            </th>
+            <th> 
+                {% if pizza.price_large %}
+                <form action="{% url 'create_pizza' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ pizza.price_large }}">
+                    <input name="name" type="hidden" value="{{ pizza.name }}">
+                    <input name="is_special" type="hidden" value="{{ pizza.is_special }}">
+                    <input name="topping_count" type="hidden" value="{{ pizza.topping_count }}">
+                    <input name="type" type="hidden" value="sicilian">
+                    <input name="size" type="hidden" value="large">
+                    <button type="submit"> ${{ pizza.price_large }} </button>
+                </form>
+                {% endif %}
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Subs</h1>
+<table>
+    {% for sub in subs %}
+        <tr>
+            <th> {{ sub.name }} </th>
+            <th>
+                {% if sub.price_small %}
+                 <form action="{% url 'create_sub' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ sub.price_small }}">
+                    <input name="name" type="hidden" value="{{ sub.name }}">
+                    <input name="size" type="hidden" value="small">
+                    <button type="submit"> ${{ sub.price_small }} </button>
+                </form>
+                {% endif %}
+            </th>
+            <th>
+                {% if sub.price_large %}
+                <form action="{% url 'create_sub' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ sub.price_large }}">
+                    <input name="name" type="hidden" value="{{ sub.name }}">
+                    <input name="size" type="hidden" value="large">
+                    <button type="submit"> ${{ sub.price_large }} </button>
+                </form>
+                {% endif %}
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Pastas</h1>
+<table>
+    {% for pasta in pastas %}
+        <tr>
+            <th> {{ pasta.name }} </th>
+            <th>
+                <form action="{% url 'add_item' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ pasta.price }}">
+                    <input name="name" type="hidden" value="{{ pasta.name }}">
+                    <input name="type" type="hidden" value="pasta">
+                    <button type="submit"> ${{ pasta.price }} </button>
+                </form>
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Salads</h1>
+<table>
+    {% for salad in salads %}
+        <tr>
+            <th> {{ salad.name }} </th>
+            <th>
+                <form action="{% url 'add_item' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ salad.price }}">
+                    <input name="name" type="hidden" value="{{ salad.name }}">
+                    <input name="type" type="hidden" value="salad">
+                    <button type="submit"> ${{ salad.price }} </button>
+                </form>
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Dinner Platters</h1>
+<table>
+    {% for platter in dinner_platters %}
+        <tr>
+            <th> {{ platter.name }} </th>
+            <th>
+                {% if platter.price_small %}
+                 <form action="{% url 'add_item' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ platter.price_small }}">
+                    <input name="name" type="hidden" value="{{ platter.name }}">
+                    <input name="type" type="hidden" value="dinner platter">
+                    <input name="size" type="hidden" value="small">
+                    <button type="submit"> ${{ platter.price_small }} </button>
+                </form>
+                {% endif %}
+            </th>
+            <th>
+                {% if platter.price_large %}
+                <form action="{% url 'add_item' %}" method="post">
+                    {% csrf_token %}
+                    <input name="price" type="hidden" value="{{ platter.price_large }}">
+                    <input name="name" type="hidden" value="{{ platter.name }}">
+                    <input name="type" type="hidden" value="dinner platter">
+                    <input name="size" type="hidden" value="large">
+                    <button type="submit"> ${{ platter.price_large }} </button>
+                </form>
+                {% endif %}
+            </th>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

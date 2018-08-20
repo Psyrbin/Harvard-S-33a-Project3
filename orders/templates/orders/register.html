@@ -1,0 +1,15 @@
+{% extends "orders/layout.html" %}
+
+{% block body %}
+<h1>Register</h1>
+
+<form action="{% url 'add_user' %}" method="post">
+    {% csrf_token %}
+    <input name="username" type="text" placeholder="Username"/>
+    <input name="first_name" type="text" placeholder="First name"/>
+    <input name="last_name" type="text" placeholder="Last name"/>
+    <input name="email" type="text" placeholder="Email"/>
+    <input name="password" type="password" placeholder="Password"/>
+    <input type="submit" value="Register"/>
+</form>
+{% endblock %}

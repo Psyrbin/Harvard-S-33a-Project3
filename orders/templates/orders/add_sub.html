@@ -1,0 +1,37 @@
+{% extends "orders/layout.html" %}
+
+{% block head %}
+<script>
+    let price = {{ price }}
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.checkbox').forEach(button => button.onclick = function() {
+            if (this.checked)
+                price += parseFloat(button.dataset.price);
+            else
+                price -= parseFloat(button.dataset.price);
+            document.querySelector('#submit').value = `Add to cart (\$${ price })`;
+            document.querySelector('#total_price').value = price;
+        })
+    })
+</script>
+<title>Add sub</title>
+{% endblock %}
+
+{% block body %}
+<h1>Select additions for your {{ size }} {{ name }} sub</h1>
+<form action="{% url 'add_sub' %}" method="post">
+    {% csrf_token %}
+    {% for addition in additions %}
+        {% if size == 'small' %}
+            <input class="checkbox" type="checkbox" name="{{ addition.name }}" data-price="{{ addition.price_small }}"> {{ addition.name }} ${{ addition.price_small }}
+        {% else %}
+            <input class="checkbox" type="checkbox" name="{{ addition.name }}" data-price="{{ addition.price_large }}"> {{ addition.name }} ${{ addition.price_large }}
+        {% endif %}
+        <br>
+    {% endfor %}
+    <input id="total_price" type="hidden" name="price" value="{{ price }}">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="size" value="{{ size }}">
+    <input id="submit" type="submit" value="Add to cart (${{ price }})">
+</form>
+{% endblock %}

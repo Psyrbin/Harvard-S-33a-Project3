@@ -1,0 +1,41 @@
+{% extends "orders/layout.html" %}
+
+{% block head %}
+<title>Cart</title>
+{% endblock %}
+
+{% block body %}
+<h1>Your cart</h1>
+{% if quantity == 0 %}
+    <h2>No items in the cart</h2>
+{% else %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        {% for item in items %}
+            <tr>
+                <td> {{ item.text }} </td>
+                <td> ${{ item.price }} </td>
+                <td>
+                    <form action="{% url 'cart' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h4>Total:</h4>
+    <h5>{{ quantity }} items for ${{ total }}</h5>
+    <form action="{% url 'place_order' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="total" value="{{ total }}">
+        <input type="hidden" name="quantity" value="{{ quantity }}">
+        <input type="submit" value="Place order">
+    </form>
+{% endif %}
+{% endblock %}

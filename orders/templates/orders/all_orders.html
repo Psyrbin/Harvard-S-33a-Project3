@@ -1,0 +1,25 @@
+{% extends "orders/layout.html" %}
+
+{% block head %}
+<title>All orders</title>
+{% endblock %}
+
+{% block body %}
+{% for order in orders %}
+    <h1>Order #{{ order.id }} by {{ order.user }}: {{ order.items_count }} items for ${{ order.total }}</h1>
+
+    {% if order.status %}
+        <h3>Status: complete</h3>
+    {% else %}
+        <h3>Status: pending</h3>
+    {% endif %}
+
+    <form action="{% url 'order' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ order.id }}">
+        <input type="submit" value="View">
+    </form>
+{% empty %}
+    <h1>No orders yet</h1>
+{% endfor %}
+{% endblock %}
